@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="m-3">
+    <h1>Nominate Video</h1>
+
+    <p>To get the video ID, take the of the URL after <code class="text-success">?v=</code> and before any <code class="text-success">&</code></p>
+    <ul>
+        <li>
+            <p>For example, the ID of <a href="https://www.youtube.com/watch?v=aOT_bG-vWyg&t=209s">https://www.youtube.com/watch?v=<b class="success">aOT_bG-vWyg</b>&t=209s</a> would be <code class="text-success">aOT_bG-vWyg</code>.</p>
+        </li>
+    </ul>
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+      
+        {% for field in form
+               if field.widget.input_type != 'hidden' %}
+      
+          <p>
+            {{ field.label }}
+            {{ field }}
+      
+            {% for error in field.errors %}
+              {{ error }}
+            {% endfor %}
+          </p>
+      
+        {% endfor %}
+      
+        <button type="submit">Submit</button>
+      </form>
+      
+</div>
+
+{% endblock %}

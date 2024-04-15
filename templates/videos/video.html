@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="m-3">
+    <h1>Video</h1>
+
+    <div>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video.id }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>
+
+    <div class="m-3">
+        <p>Best Basics: <i class="fa-solid fa-thumbs-up"></i>TODO ADD COUNTERS</p>
+        <p>In-depth</p>
+        <p>Engaging</p>
+        <p>Favorite
+            <form method="POST" action="/videos/{{ video_id }}/favorite">
+                <button class="
+                btn 
+                btn-sm 
+                {{'btn-primary' if msg in g.user.likes else 'btn-secondary'}}"
+                >
+                <i class="fa-star"></i> 
+                </button>
+            </form>
+        </p>
+    </div>
+
+    <form method="POST">
+        {{ form.csrf_token}}
+        {{ form.topics}}
+        <button type="submit">Submit</button>
+    </form>
+      
+</div>
+
+{% endblock %}

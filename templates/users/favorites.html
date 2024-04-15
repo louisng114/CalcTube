@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 class="m-3">Favorite videos</h1>
+
+<div class="m-3">
+    <h2>Videos</h2>
+    <table class="table table-striped">
+        <tr>
+            <th>Video Name</th>
+            <th>Video Length</th>
+            <th>Basics</th>
+            <th>In-Depth</th>
+            <th>Engaging</th>
+            <th>Fav.</th>
+        </tr>
+        {% for video in g.user.favorites %}
+        <tr>
+            <td><a href="youtube.com/{{video.id}}">{{video.id}}</a></td>
+            <td>TODO</td>
+            <td><i class="fa-solid fa-thumbs-up"></i>TODO ADD COUNTERS</td>
+            <td><i class="fa-solid fa-thumbs-up"></i></td>
+            <td><i class="fa-solid fa-thumbs-up"></i></td>
+            <td><i class="fa-solid fa-star"></i></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}

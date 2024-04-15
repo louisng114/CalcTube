@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="m-3">
+    <h1>How to use this site:</h1>
+    <ul>
+        <li>
+            <p>Nominate and vote on calculus videos on YouTube.
+        </li>
+        <li>
+            <p>Votes on the videos are based on three categories: best basics, best in-depth, most engaging.</p>
+            <ul>
+                <li>
+                    <p>Best basics: the video is great for beginner of the topic.</p>
+                </li>
+                <li>
+                    <p>Best in-depth: the video is great for someone who wants to dive deeper and master the topic.</p>
+                </li>
+                <li>
+                    <p>Most engaging: the video is fun to watch for reasons ranging from having excellent visual to being funny.</p>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <p class="text-danger">Remember that watching videos is not a substitute for active thinking and practice. Check the resource page for additional resources.</p>
+        </li>
+    </ul>
+</div>
+
+<div class="m-3">
+    <table class="table table-striped">
+        <tr>
+            <th><h3>Topics</h3></th>
+        </tr>
+        {% for topic in topics %}
+        <tr>
+            <td><a href="/topics/{{ topic.name }}">{{ topic.name }}</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}

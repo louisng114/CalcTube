@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 class="m-3">{{topic.name}}</h1>
+
+<div class="m-3">
+    <ul>
+        {% for line in desc %}
+        <li>
+            {{line}}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="m-3">
+    <h2>Videos</h2>
+    <table class="table table-striped">
+        <tr>
+            <th>Video Name</th>
+            <th>Video Length</th>
+            <th>Basics</th>
+            <th>In-depth</th>
+            <th>Engaging</th>
+            <th>Fav.</th>
+        </tr>
+        {% for video in topic.videos %}
+        <tr>
+            <td><a href="youtube.com/{{ video.id }}">{{video.id}}</a></td>
+            <td>TODO</td>
+            <td><i class="fa-solid fa-thumbs-up"></i>TODO ADD COUNTERS WITH LENGTH</td>
+            <td><i class="fa-solid fa-thumbs-up"></i></td>
+            <td><i class="fa-solid fa-thumbs-up"></i></td>
+            <td>
+                <form method="POST" action="/videos/{{ video_id }}/favorite">
+                    <button class="
+                    btn 
+                    btn-sm 
+                    {{'btn-primary' if msg in g.user.likes else 'btn-secondary'}}"
+                    >
+                    <i class="fa-star"></i> 
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}

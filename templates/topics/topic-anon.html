@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 class="m-3">{{topic.name}}</h1>
+
+<div class="m-3">
+    <ul>
+        {% for line in desc %}
+        <li>
+            {{line}}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="m-3">
+    <h2>Videos</h2>
+    <table class="table table-striped">
+        <tr>
+            <th>Video Name</th>
+            <th>Video Length</th>
+            <th>Basics</th>
+            <th>In-depth</th>
+            <th>Engaging</th>
+        </tr>
+        {% for video in topic.videos %}
+        <tr>
+            <td><a href="youtube.com/{{video.id}}">{{video.id}}</a></td>
+            <td>TODO</td>
+            <td></i>TODO ADD COUNTERS</td>
+            <td></i></td>
+            <td></i></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}
