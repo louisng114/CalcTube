@@ -42,17 +42,20 @@ class User(db.Model):
 
     basic_votes = db.relationship(
         "Video",
-        secondary="basic_votes"
+        secondary="basic_votes",
+        backref=db.backref("basic_vote_users")
     )
 
     depth_votes = db.relationship(
         "Video",
-        secondary="depth_votes"
+        secondary="depth_votes",
+        backref=db.backref("depth_vote_users")
     )
 
     engage_votes = db.relationship(
         "Video",
-        secondary="engage_votes"
+        secondary="engage_votes",
+        backref=db.backref("engage_vote_users")
     )
 
     @classmethod

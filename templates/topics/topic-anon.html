@@ -28,9 +28,9 @@
         <tr>
             <td><a href="youtube.com/{{video.id}}">{{video.id}}</a></td>
             <td>TODO</td>
-            <td></i>TODO ADD COUNTERS</td>
-            <td></i></td>
-            <td></i></td>
+            <td>{{ video.basic_vote_users | length }}</td>
+            <td>{{ video.depth_vote_users | length }}</td>
+            <td>{{ video.engage_vote_users | length }}</td>
         </tr>
         {% endfor %}
     </table>

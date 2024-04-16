@@ -17,3 +17,7 @@ class QuerySelectMultipleFieldWithCheckboxes(QuerySelectMultipleField):
 class VideoForm(FlaskForm):
     id = StringField("Video ID: ", validators=[InputRequired(message="Video ID required"), Length(max=15, message="Please enter a valid video ID")])
     topics = QuerySelectMultipleFieldWithCheckboxes("Select all topics the video falls under: ")
+
+## Form for changing video topics ##
+class VideoEditForm(FlaskForm):
+    topics = QuerySelectMultipleFieldWithCheckboxes("Select all topics the video falls under: ")

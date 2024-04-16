@@ -29,17 +29,31 @@
         <tr>
             <td><a href="youtube.com/{{ video.id }}">{{video.id}}</a></td>
             <td>TODO</td>
-            <td><i class="fa-solid fa-thumbs-up"></i>TODO ADD COUNTERS WITH LENGTH</td>
-            <td><i class="fa-solid fa-thumbs-up"></i></td>
-            <td><i class="fa-solid fa-thumbs-up"></i></td>
             <td>
-                <form method="POST" action="/videos/{{ video_id }}/favorite">
-                    <button class="
-                    btn 
-                    btn-sm 
-                    {{'btn-primary' if msg in g.user.likes else 'btn-secondary'}}"
-                    >
-                    <i class="fa-star"></i> 
+                <form method="POST" action="/videos/{{ video.id }}/basic">
+                    <button class="btn btn-sm">
+                        <i class="{{'fa-solid' if video in g.user.basic_votes else 'fa-regular'}} fa-thumbs-up"></i>
+                    </button> {{ video.basic_vote_users | length }}
+                </form>
+            </td>
+            <td>
+                <form method="POST" action="/videos/{{ video.id }}/depth">
+                    <button class="btn btn-sm">
+                        <i class="{{'fa-solid' if video in g.user.depth_votes else 'fa-regular'}} fa-thumbs-up"></i>
+                    </button> {{ video.depth_vote_users | length }}
+                </form>
+            </td>
+            <td>
+                <form method="POST" action="/videos/{{ video.id }}/engage">
+                    <button class="btn btn-sm">
+                        <i class="{{'fa-solid' if video in g.user.engage_votes else 'fa-regular'}} fa-thumbs-up"></i>
+                    </button> {{ video.engage_vote_users | length }}
+                </form>
+            </td>
+            <td>
+                <form method="POST" action="/videos/{{ video.id }}/favorite">
+                    <button class="btn btn-sm">
+                        <i class="{{'fa-solid' if video in g.user.favorites else 'fa-regular'}} fa-star"></i>
                     </button>
                 </form>
             </td>

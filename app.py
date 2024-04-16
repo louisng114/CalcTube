@@ -3,7 +3,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
 from models import db, connect_db, User, Video, Topic
-from forms import UserForm, VideoForm
+from forms import UserForm, VideoForm, VideoEditForm
 
 from secret import secret_key, api_key
 
@@ -143,10 +143,10 @@ def videos_add():
 
     if form.validate_on_submit():
         video_id = form.id.data
-        vid = Video(id=video_id, nominator=g.user.username)
-        vid.topics.extend(form.topics.data)
+        video = Video(id=video_id, nominator=g.user.username)
+        video.topics.extend(form.topics.data)
 
-        db.session.add(vid)
+        db.session.add(video)
         db.session.commit()
 
         return redirect(f"/videos/{video_id}")
@@ -158,24 +158,84 @@ def videos_add():
 def video_view(video_id):
     """View video. Can favorite, vote, and change topic if logged in."""
 
-    vid = Video.query.get(video_id)
+    video = Video.query.get_or_404(video_id)
 
     if not g.user:
-        return render_template("/videos/video-anon.html")
+        return render_template("/videos/video-anon.html", video=video)
 
-    form = VideoForm(data={"topics" : vid.topics})
+    form = VideoEditForm(data={"topics" : video.topics})
     form.topics.query = Topic.query.all()
 
     if form.validate_on_submit():
-        vid.topics.clear()
-        vid.topics.extend(form.topics.data)
+        video.topics.clear()
+        video.topics.extend(form.topics.data)
 
-        db.session.add(vid)
+        db.session.add(video)
         db.session.commit()
 
         return redirect(f"/videos/{video_id}")
 
-    return render_template("/videos/video.html", form=form)
+    return render_template("/videos/video.html", form=form, video=video)
+
+
+@app.route('/videos/<video_id>/basic', methods=["POST"])
+def add_basic(video_id):
+    """Add or remove a best basics vote for the currently-logged-in user."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    video = Video.query.get_or_404(video_id)
+
+    if video not in g.user.basic_votes:
+        g.user.basic_votes.append(video)
+    else:
+        g.user.basic_votes.remove(video)
+    db.session.commit()
+
+    return redirect(f"/videos/{video_id}")
+# TODO: TURN THIS INTO AJAX
+
+
+@app.route('/videos/<video_id>/depth', methods=["POST"])
+def add_depth(video_id):
+    """Add or remove a best in-depth vote for the currently-logged-in user."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    video = Video.query.get_or_404(video_id)
+
+    if video not in g.user.depth_votes:
+        g.user.depth_votes.append(video)
+    else:
+        g.user.depth_votes.remove(video)
+    db.session.commit()
+
+    return redirect(f"/videos/{video_id}")
+# TODO: TURN THIS INTO AJAX
+
+
+@app.route('/videos/<video_id>/engage', methods=["POST"])
+def add_engage(video_id):
+    """Add or remove a most engaging vote for the currently-logged-in user."""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    video = Video.query.get_or_404(video_id)
+
+    if video not in g.user.engage_votes:
+        g.user.engage_votes.append(video)
+    else:
+        g.user.engage_votes.remove(video)
+    db.session.commit()
+
+    return redirect(f"/videos/{video_id}")
+# TODO: TURN THIS INTO AJAX
 
 
 @app.route('/videos/<video_id>/favorite', methods=["POST"])
@@ -186,7 +246,7 @@ def add_favorite(video_id):
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-    clicked_video = Video.query.get(video_id)
+    clicked_video = Video.query.get_or_404(video_id)
 
     if clicked_video not in g.user.favorites:
         g.user.favorites.append(clicked_video)
@@ -199,14 +259,14 @@ def add_favorite(video_id):
 
 
 @app.route('/videos/<video_id>/delete', methods=["POST"])
-def messages_destroy(video_id):
+def remove_vid(video_id):
     """Delete a video."""
 
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-    video = Video.query.get(video_id)
+    video = Video.query.get_or_404(video_id)
 
     if video.nominator != g.user.id:
         flash("Access unauthorized.", "danger")
@@ -226,7 +286,7 @@ def messages_destroy(video_id):
 def topic_view(name):
     """View topic. Can favorite, vote, and change topic if logged in."""
 
-    topic = Topic.query.get(name)
+    topic = Topic.query.get_or_404(name)
     desc = topic.description.split("; ")
 
     if not g.user:

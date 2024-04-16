@@ -10,28 +10,56 @@
     </div>
 
     <div class="m-3">
-        <p>Best Basics: <i class="fa-solid fa-thumbs-up"></i>TODO ADD COUNTERS</p>
-        <p>In-depth</p>
-        <p>Engaging</p>
+        <p>Best Basics: {{ video.basic_vote_users | length }}
+            <form method="POST" action="/videos/{{ video.id }}/basic">
+                <button class="btn btn-sm">
+                    <i class="{{'fa-solid' if video in g.user.basic_votes else 'fa-regular'}} fa-thumbs-up"></i>
+                </button>
+            </form>
+        </p>
+        <p>Best In-Depth: {{ video.depth_vote_users | length }}
+            <form method="POST" action="/videos/{{ video.id }}/depth">
+                <button class="btn btn-sm">
+                    <i class="{{'fa-solid' if video in g.user.depth_votes else 'fa-regular'}} fa-thumbs-up"></i>
+                </button>
+            </form>
+        </p>
+        <p>Most Engaging: {{ video.engage_vote_users | length }}
+            <form method="POST" action="/videos/{{ video.id }}/engage">
+                <button class="btn btn-sm">
+                    <i class="{{'fa-solid' if video in g.user.engage_votes else 'fa-regular'}} fa-thumbs-up"></i>
+                </button>
+            </form>
+        </p>
         <p>Favorite
-            <form method="POST" action="/videos/{{ video_id }}/favorite">
-                <button class="
-                btn 
-                btn-sm 
-                {{'btn-primary' if msg in g.user.likes else 'btn-secondary'}}"
-                >
-                <i class="fa-star"></i> 
+            <form method="POST" action="/videos/{{ video.id }}/favorite">
+                <button class="btn btn-sm">
+                    <i class="{{'fa-solid' if video in g.user.favorites else 'fa-regular'}} fa-star"></i>
                 </button>
             </form>
         </p>
     </div>
 
-    <form method="POST">
-        {{ form.csrf_token}}
-        {{ form.topics}}
+    <form method="POST" action="/videos/{{ video.id }}">
+        {{ form.hidden_tag() }}
+        
+        {% for field in form
+                if field.widget.input_type != 'hidden' %}
+        
+            <p>
+            {{ field.label }}
+            {{ field }}
+        
+            {% for error in field.errors %}
+                <br><span class="text-sm text-danger">{{ error }}</span>
+            {% endfor %}
+            </p>
+        
+        {% endfor %}
+        
         <button type="submit">Submit</button>
     </form>
-      
+
 </div>
 
 {% endblock %}
