@@ -5,7 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from models import db, connect_db, User, Video, Topic
 from forms import UserForm, VideoForm, VideoEditForm
 
-from secret import secret_key, api_key
+from secret import secret_key
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///calctube_db'
@@ -143,10 +143,9 @@ def videos_add():
 
     if form.validate_on_submit():
         video_id = form.id.data
-        video = Video(id=video_id, nominator=g.user.username)
+        video = Video.add_video(id=video_id, nominator=g.user.username)
         video.topics.extend(form.topics.data)
 
-        db.session.add(video)
         db.session.commit()
 
         return redirect(f"/videos/{video_id}")

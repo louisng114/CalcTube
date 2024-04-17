@@ -1,10 +1,17 @@
 from datetime import datetime
 
+from googleapiclient.discovery import build
+import isodate
+
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 
+from secret import api_key
+
 bcrypt = Bcrypt()
 db = SQLAlchemy()
+
+youtube = build('youtube', 'v3', developerKey=api_key)
 
 def connect_db(app):
     """Connect to database."""
@@ -115,6 +122,48 @@ class Video(db.Model):
         ),
         nullable=False
     )
+
+    duration = db.Column(
+        db.Integer(),
+        nullable=False
+    )
+
+    def readable_duration(self):
+        hours = self.duration // 3600
+        minutes = (self.duration % 3600) // 60
+        seconds = self.duration % 60
+
+        if hours > 0:
+            return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+        else:
+            return f"{minutes:02d}:{seconds:02d}"
+
+    def title(self):
+        request = youtube.videos().list(part='snippet', id=self.id)
+        response = request.execute()
+        title = response['items'][0]['snippet']['title']
+        return title
+
+    @classmethod
+    def add_video(cls, id, nominator):
+        """Add video.
+
+        Query YouTube Data API for video duration.
+        """
+
+        request = youtube.videos().list(part='contentDetails', id=id)
+        response = request.execute()
+        duration = response['items'][0]['contentDetails']['duration']
+        parsed_duration = isodate.parse_duration(duration)
+
+        video = Video(
+            id=id,
+            nominator=nominator,
+            duration=parsed_duration.seconds
+        )
+
+        db.session.add(video)
+        return video
 
 class Topic(db.Model):
     """Model for the Topic class"""

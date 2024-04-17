@@ -27,8 +27,12 @@
         </tr>
         {% for video in topic.videos %}
         <tr>
-            <td><a href="youtube.com/{{ video.id }}">{{video.id}}</a></td>
-            <td>TODO</td>
+            <td><a href="youtube.com/{{ video.id }}">{% if video.title()|length > 30 %}
+                {{ video.title()[:30] }}...
+              {% else %}
+                {{ video.title() }}
+              {% endif %}</a></td>
+            <td>{{ video.readable_duration() }}</td>
             <td>
                 <form method="POST" action="/videos/{{ video.id }}/basic">
                     <button class="btn btn-sm">
