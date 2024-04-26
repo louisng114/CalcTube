@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, flash, session, g
+from flask import Flask, request, render_template, redirect, flash, session, g, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
@@ -90,7 +90,6 @@ def login():
         flash("Invalid credentials.", 'danger')
 
     return render_template('users/login.html', form=form)
-    # TODO: MAKE
 
 
 @app.route('/logout')
@@ -101,6 +100,26 @@ def logout():
     flash("Successfully logged out", 'info')
 
     return redirect('/login')
+
+
+@app.route('/nominations')
+def users_nominations():
+    """Show user's nominated videos. Includes button to remove nomination"""
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    nomination_ids = []
+    for video in g.user.nominations:
+        nomination_ids.append(video.id)
+
+    videos = (Video
+                .query
+                .filter(Video.id.in_(nomination_ids))
+                .limit(50)
+                .all())
+    return render_template('users/nominations.html', videos=videos)
 
 
 @app.route('/favorites')
@@ -121,7 +140,6 @@ def users_favorites():
                 .limit(50)
                 .all())
     return render_template('users/favorites.html', videos=videos)
-    # TODO: MAKE
 
 
 ##############################################################################
@@ -143,7 +161,7 @@ def videos_add():
 
     if form.validate_on_submit():
         video_id = form.id.data
-        video = Video.add_video(id=video_id, nominator=g.user.username)
+        video = Video.add_video(id=video_id, nominator_username=g.user.username)
         video.topics.extend(form.topics.data)
 
         db.session.commit()
@@ -189,12 +207,16 @@ def add_basic(video_id):
 
     if video not in g.user.basic_votes:
         g.user.basic_votes.append(video)
+        voted = True
     else:
         g.user.basic_votes.remove(video)
+        voted = False
+
     db.session.commit()
 
-    return redirect(f"/videos/{video_id}")
-# TODO: TURN THIS INTO AJAX
+    vote_count = len(video.basic_vote_users)
+
+    return jsonify({"voted": voted, "voteCount": vote_count}), 200
 
 
 @app.route('/videos/<video_id>/depth', methods=["POST"])
@@ -209,12 +231,16 @@ def add_depth(video_id):
 
     if video not in g.user.depth_votes:
         g.user.depth_votes.append(video)
+        voted = True
     else:
         g.user.depth_votes.remove(video)
+        voted = False
+
     db.session.commit()
 
-    return redirect(f"/videos/{video_id}")
-# TODO: TURN THIS INTO AJAX
+    vote_count = len(video.depth_vote_users)
+
+    return jsonify({"voted": voted, "voteCount": vote_count}), 200
 
 
 @app.route('/videos/<video_id>/engage', methods=["POST"])
@@ -229,12 +255,16 @@ def add_engage(video_id):
 
     if video not in g.user.engage_votes:
         g.user.engage_votes.append(video)
+        voted = True
     else:
         g.user.engage_votes.remove(video)
+        voted = False
+
     db.session.commit()
 
-    return redirect(f"/videos/{video_id}")
-# TODO: TURN THIS INTO AJAX
+    vote_count = len(video.engage_vote_users)
+
+    return jsonify({"voted": voted, "voteCount": vote_count}), 200
 
 
 @app.route('/videos/<video_id>/favorite', methods=["POST"])
@@ -245,16 +275,17 @@ def add_favorite(video_id):
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
-    clicked_video = Video.query.get_or_404(video_id)
+    video = Video.query.get_or_404(video_id)
 
-    if clicked_video not in g.user.favorites:
-        g.user.favorites.append(clicked_video)
+    if video not in g.user.favorites:
+        g.user.favorites.append(video)
+        voted = True
     else:
-        g.user.favorites.remove(clicked_video)
+        g.user.favorites.remove(video)
+        voted = False
     db.session.commit()
 
-    return redirect("/favorites")
-# TODO: TURN THIS INTO AJAX
+    return jsonify({"voted": voted}), 200
 
 
 @app.route('/videos/<video_id>/delete', methods=["POST"])
@@ -267,14 +298,14 @@ def remove_vid(video_id):
 
     video = Video.query.get_or_404(video_id)
 
-    if video.nominator != g.user.id:
+    if video.nominator_username != g.user.username:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
     db.session.delete(video)
     db.session.commit()
 
-    return redirect("/favorites")
+    return redirect("/nominations")
 
 
 ##############################################################################
@@ -292,9 +323,6 @@ def topic_view(name):
         return render_template("topics/topic-anon.html", topic=topic, desc=desc)
 
     return render_template("topics/topic.html", topic=topic, desc=desc)
-    # TODO
-    # show name and description
-    # show videos tagged with topic
 
 
 ##############################################################################
@@ -318,12 +346,6 @@ def resources_page():
     """Show resources page"""
 
     return render_template('resources.html')
-    # TODO
-    # show instruction getting url
-    # remind student to practice
-    # collegeboard
-    # brilliant
-    # khanacademy
 
 
 ##############################################################################
@@ -338,15 +360,3 @@ def add_header(req):
     req.headers['Cache-Control'] = 'public, max-age=0'
     return req
 
-
-# form = VideoForm(data={"choices" : video.topics})
-# form.choices.query = Topic.query.all()
-
-# video.topics.clear()
-# video.topics.extend(form.choices.data)
-# db.session.commit()
-
-# Use form.choices in the HTML
-# Remove bullets with CSS
-
-# TODO: pip freeze for requirement.txt

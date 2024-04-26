@@ -1,3 +1,46 @@
 .navbar {
     background-color: #FFFAA0;
 }
+
+.vidPlayer {
+    display: flex;
+    justify-content: center;
+}
+
+.voteBlock .voteContainer, .voteBlock .favContainer {
+    display: flex;
+    justify-content: center;
+    font-size: x-large;
+}
+
+.voteBlock .voteCount {
+    margin-left: 5px;
+}
+
+.voteBlock .voteForm , voteBlock .favForm{
+    display: inline;
+}
+
+.voteBlock .voteIcon {
+    margin-top: 1px;
+    vertical-align: top;
+}
+
+.videoTable .voteContainer, .videoTable .favContainer {
+    display: flex;
+    justify-content: left;
+}
+
+.videoTable .voteCount {
+    margin-left: 5px;
+}
+
+.videoTable .voteForm {
+    display: inline;
+}
+
+.videoTable .voteIcon {
+    margin-top: 1px;
+    margin-left: -7px;
+    vertical-align: top;
+}

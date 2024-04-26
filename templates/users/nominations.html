@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<h1 class="m-3"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>Favorite videos<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></h1>
+<h1 class="m-3">My Nominations</h1>
 
 <div class="m-3">
     <table class="table table-striped videoTable">
@@ -13,8 +13,9 @@
             <th>In-depth</th>
             <th>Engaging</th>
             <th>Fav.</th>
+            <th><span class="text-danger">REMOVE VIDEO</span></th>
         </tr>
-        {% for video in g.user.favorites %}
+        {% for video in g.user.nominations %}
         <tr>
             <td><a href="/videos/{{ video.id }}">{% if video.title()|length > 30 %}
                 {{ video.title()[:30] }}...
@@ -58,6 +59,15 @@
                     <form method="POST" action="/videos/{{ video.id }}/favorite" class="favForm">
                         <button class="btn btn-sm" data-video-id="{{ video.id }}">
                             <i class="voteIcon {{'fa-solid' if video in g.user.favorites else 'fa-regular'}} fa-star"></i>
+                        </button>
+                    </form>
+                </div>
+            </td>
+            <td>
+                <div class="delContainer">
+                    <form method="POST" action="/videos/{{ video.id }}/delete">
+                        <button class="btn btn-sm">
+                            <i class="voteIcon fa-solid fa-trash"></i>
                         </button>
                     </form>
                 </div>

@@ -16,7 +16,7 @@
 
 <div class="m-3">
     <h2>Videos</h2>
-    <table class="table table-striped">
+    <table class="table table-striped videoTable">
         <tr>
             <th>Video Title</th>
             <th>Video Length</th>
@@ -26,7 +26,11 @@
         </tr>
         {% for video in topic.videos %}
         <tr>
-            <td><a href="youtube.com/{{video.id}}">{{ video.title() }}</a></td>
+            <td><a href="/videos/{{ video.id }}">{% if video.title()|length > 30 %}
+                {{ video.title()[:30] }}...
+              {% else %}
+                {{ video.title() }}
+              {% endif %}</a></td></td>
             <td>{{ video.readable_duration() }}</td>
             <td>{{ video.basic_vote_users | length }}</td>
             <td>{{ video.depth_vote_users | length }}</td>

@@ -12,24 +12,24 @@
         </li>
     </ul>
 
-    <form method="POST" action="/videos/new">
+
+    <form method="POST" action="/videos/new" class="topicsForm">
       {{ form.hidden_tag() }}
-    
       {% for field in form
               if field.widget.input_type != 'hidden' %}
-    
-        <p>
+      
+          <p>
           {{ field.label }}
           {{ field }}
-    
+      
           {% for error in field.errors %}
-            <br><span class="text-sm text-danger">{{ error }}</span>
+              <br><span class="text-sm text-danger">{{ error }}</span>
           {% endfor %}
-        </p>
-    
+          </p>
+      
       {% endfor %}
     
-      <button type="submit">Submit</button>
+      <div class="d-flex justify-content-center"><button class="btn btn-info" type="submit">Submit</button></div>
     </form>
       
 </div>

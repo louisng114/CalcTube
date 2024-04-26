@@ -5,44 +5,50 @@
 <div class="m-3">
     <h1>Video</h1>
 
-    <div>
+    <div class="vidPlayer">
         <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video.id }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
     </div>
 
-    <div class="m-3">
-        <p>Best Basics: {{ video.basic_vote_users | length }}
-            <form method="POST" action="/videos/{{ video.id }}/basic">
+    <div class="m-3 row voteBlock">
+        <div class ="voteContainer col-sm-6 col-xl-3">
+            <span>Best Basics: </span>
+            <span class="voteCount">{{ video.basic_vote_users | length }}</span>
+            <form method="POST" action="/videos/{{ video.id }}/basic" class="voteForm">
                 <button class="btn btn-sm">
-                    <i class="{{'fa-solid' if video in g.user.basic_votes else 'fa-regular'}} fa-thumbs-up"></i>
+                    <i class="voteIcon {{'fa-solid' if video in g.user.basic_votes else 'fa-regular'}} fa-thumbs-up"></i>
                 </button>
             </form>
-        </p>
-        <p>Best In-Depth: {{ video.depth_vote_users | length }}
-            <form method="POST" action="/videos/{{ video.id }}/depth">
+        </div>
+        <div class ="voteContainer col-sm-6 col-xl-3">
+            <span>Best In-Depth: </span>
+            <span class="voteCount">{{ video.depth_vote_users | length }}</span>
+            <form method="POST" action="/videos/{{ video.id }}/depth" class="voteForm">
                 <button class="btn btn-sm">
-                    <i class="{{'fa-solid' if video in g.user.depth_votes else 'fa-regular'}} fa-thumbs-up"></i>
+                    <i class="voteIcon {{'fa-solid' if video in g.user.depth_votes else 'fa-regular'}} fa-thumbs-up"></i>
                 </button>
             </form>
-        </p>
-        <p>Most Engaging: {{ video.engage_vote_users | length }}
-            <form method="POST" action="/videos/{{ video.id }}/engage">
+        </div>
+        <div class ="voteContainer col-sm-6 col-xl-3">
+            <span>Most Engaging: </span>
+            <span class="voteCount">{{ video.engage_vote_users | length }}</span>
+            <form method="POST" action="/videos/{{ video.id }}/engage" class="voteForm">
                 <button class="btn btn-sm">
-                    <i class="{{'fa-solid' if video in g.user.engage_votes else 'fa-regular'}} fa-thumbs-up"></i>
+                    <i class="voteIcon {{'fa-solid' if video in g.user.engage_votes else 'fa-regular'}} fa-thumbs-up"></i>
                 </button>
             </form>
-        </p>
-        <p>Favorite
-            <form method="POST" action="/videos/{{ video.id }}/favorite">
+        </div>
+        <div class="favContainer col-sm-6 col-xl-3">
+            <span>Favorite</span>
+            <form method="POST" action="/videos/{{ video.id }}/favorite" class="favForm">
                 <button class="btn btn-sm">
-                    <i class="{{'fa-solid' if video in g.user.favorites else 'fa-regular'}} fa-star"></i>
+                    <i class="voteIcon {{'fa-solid' if video in g.user.favorites else 'fa-regular'}} fa-star"></i>
                 </button>
             </form>
-        </p>
+        </div>
     </div>
 
-    <form method="POST" action="/videos/{{ video.id }}">
+    <form method="POST" action="/videos/{{ video.id }}" class="topicsForm">
         {{ form.hidden_tag() }}
-        
         {% for field in form
                 if field.widget.input_type != 'hidden' %}
         
@@ -57,7 +63,7 @@
         
         {% endfor %}
         
-        <button type="submit">Submit</button>
+        <div class="d-flex justify-content-center"><button class="btn btn-info" type="submit">Submit</button></div>
     </form>
 
 </div>

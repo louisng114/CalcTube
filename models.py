@@ -64,6 +64,8 @@ class User(db.Model):
         secondary="engage_votes",
         backref=db.backref("engage_vote_users")
     )
+    
+    nominations = db.relationship('Video', back_populates='nominator')
 
     @classmethod
     def register(cls, username, password):
@@ -114,7 +116,7 @@ class Video(db.Model):
     )
 
     # user who nominated the video
-    nominator = db.Column(
+    nominator_username = db.Column(
         db.String(15),
         db.ForeignKey(
             "users.username",
@@ -127,6 +129,8 @@ class Video(db.Model):
         db.Integer(),
         nullable=False
     )
+
+    nominator = db.relationship('User', back_populates='nominations')
 
     def readable_duration(self):
         hours = self.duration // 3600
@@ -145,7 +149,7 @@ class Video(db.Model):
         return title
 
     @classmethod
-    def add_video(cls, id, nominator):
+    def add_video(cls, id, nominator_username):
         """Add video.
 
         Query YouTube Data API for video duration.
@@ -158,7 +162,7 @@ class Video(db.Model):
 
         video = Video(
             id=id,
-            nominator=nominator,
+            nominator_username=nominator_username,
             duration=parsed_duration.seconds
         )
 
