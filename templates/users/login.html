@@ -5,15 +5,15 @@
 <div class="m-3">
     <h1>Login</h1>
 
-    <form method="POST">
+    <form method="POST" class="userForm border border-primary rounded-4 bg-primary bg-opacity-10">
         {{ form.hidden_tag() }}
       
         {% for field in form
                if field.widget.input_type != 'hidden' %}
       
           <p>
-            {{ field.label }}
-            {{ field }}
+            {{ field.label(class_="form-label") }}
+            {{ field(class_="form-control") }}
       
             {% for error in field.errors %}
               {{ error }}
@@ -22,7 +22,7 @@
       
         {% endfor %}
       
-        <button type="submit">Submit</button>
+        <div class="d-flex justify-content-center"><button class="btn btn-info" type="submit">Submit</button></div>
       </form>
       
 </div>

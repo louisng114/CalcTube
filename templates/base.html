@@ -10,49 +10,67 @@
 </head>
 <body>
 
-  <nav class="navbar navbar-expand-lg mb-3">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/">CalcTube</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" href="/">Home</a>
-          </li>
-          {% if g.user %}
-          <li class="nav-item">
-            <a class="nav-link" href="/videos/new">Nominate</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/nominations">My Nominations</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/favorites">Favorites</a>
-          </li>
-          {% endif %}
-          <li class="nav-item">
-            <a class="nav-link" href="/resources">Additional resources</a>
-          </li>
-        </ul>
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-          {% if g.user %}
-          <li class="nav-item">
-            <a class="nav-link" href="/logout">Logout</a>
-          </li>
-          {% else %}
+  <div class="content-wrap">
+    <nav class="navbar navbar-expand-md mb-3" data-bs-theme="light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">
+          <img src="../static/images/calctube-logo.png" alt="CalcTube Logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-            <a class="nav-link" href="/register">Register</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/login">Login</a>
-          </li>
-          {% endif %}
-        </ul>
+              <a class="nav-link" href="/">Home</a>
+            </li>
+            {% if g.user %}
+            <li class="nav-item">
+              <a class="nav-link" href="/videos/new">Nominate</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/nominations">My Nominations</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/favorites">Favorites</a>
+            </li>
+            {% endif %}
+            <li class="nav-item">
+              <a class="nav-link" href="/resources">Additional resources</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            {% if g.user %}
+            <li class="nav-item">
+              <a class="nav-link" href="/logout">Logout</a>
+            </li>
+            {% else %}
+              <li class="nav-item">
+              <a class="nav-link" href="/register">Register</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/login">Login</a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
       </div>
+    </nav>
+
+  <div class="integralDiv">
+    <img src="../static/images/integral-symbol.png" alt="Decoration" class="integral">
+    <img src="../static/images/integral-symbol.png" alt="Decoration" class="integral">
+    <img src="../static/images/integral-symbol.png" alt="Decoration" class="integral">
+  </div>
+
+  <div class="darkModeSwitch">
+    <div class="form-check form-switch">
+      <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" data-bs-toggle="dark">
+      <label class="form-check-label" for="flexSwitchCheckDefault">Dark Mode</label>
+      <span class="icon">
+      </span>
     </div>
-  </nav>
+  </div>
 
   {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
@@ -63,8 +81,14 @@
   {% endwith %}
 
   {% block content %}{% endblock %}
+</div>
 
-  <!-- TODO: ADD CONTACT US -->
+  <footer class="bg-body-tertiary text-center text-lg-start">
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.1);">
+      Contact Us:
+      <a class="text-body" href="mailto:louisng114@hotmail.com">louisng114@hotmail.com</a>
+    </div>
+  </footer>
 
     <script src="../static/app.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>

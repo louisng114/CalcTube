@@ -1,3 +1,55 @@
+// Add dark mode functionalities
+function toggleDarkMode() {
+    const htmlTag = document.getElementsByTagName("html")[0];
+    const switchIcon = document.querySelector('.form-check .icon');
+    const integralSymbols = document.querySelectorAll('.integral');
+    if (htmlTag.dataset.bsTheme === 'dark') {
+        htmlTag.dataset.bsTheme = 'light';
+        switchIcon.innerHTML = '<i class="fas fa-sun"></i>'; //change switch icon
+        integralSymbols.forEach((image) => image.src = "../static/images/integral-symbol.png");
+        localStorage.setItem('darkMode', 'light'); // Store dark mode state in localStorage
+    } else {
+        htmlTag.dataset.bsTheme = 'dark';
+        switchIcon.innerHTML = '<i class="fas fa-moon"></i>'; //change switch icon
+        integralSymbols.forEach((image) => image.src = "../static/images/integral-symbol-dark.png");
+        localStorage.setItem('darkMode', 'dark'); // Store dark mode state in localStorage
+    }
+}
+  
+// Function to check and apply dark mode state from localStorage
+function applyDarkModeFromStorage() {
+    const darkModeState = localStorage.getItem('darkMode');
+    const switchIcon = document.querySelector('.form-check .icon');
+    const integralSymbols = document.querySelectorAll('.integral');
+    if (darkModeState === 'dark') {
+        const htmlTag = document.getElementsByTagName('html')[0];
+        htmlTag.dataset.bsTheme = 'dark';
+        integralSymbols.forEach((image) => image.src = "../static/images/integral-symbol-dark.png");
+        switchIcon.innerHTML = '<i class="fas fa-moon"></i>';
+    } else {
+        switchIcon.innerHTML = '<i class="fas fa-sun"></i>';
+    }
+}
+  
+  // Listen for the Bootstrap dark mode toggle event
+  document.addEventListener('DOMContentLoaded', function() {
+    const toggle = document.querySelector('[data-bs-toggle="dark"]');
+    if (toggle) {
+      toggle.addEventListener('click', toggleDarkMode);
+    }
+    
+    // Apply dark mode state from localStorage
+    applyDarkModeFromStorage();
+});
+  
+
+// Listen for the Bootstrap dark mode toggle event
+document.addEventListener('DOMContentLoaded', function() {
+  const toggle = document.querySelector('[data-bs-toggle="dark"]');
+  if (toggle) {
+    toggle.addEventListener('click', toggleDarkMode);
+  }
+});
 // Add vote buttons functionalities
 document.addEventListener('DOMContentLoaded', function() {
     const voteForms = document.querySelectorAll('.voteForm');
