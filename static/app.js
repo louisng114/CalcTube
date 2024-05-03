@@ -124,3 +124,46 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+    const table = document.querySelector(".videoTable");
+    let tbody;
+    if (table) {
+        tbody = table.querySelector("tbody");
+    }
+
+    // Function to sort the table rows
+    function sortTable(criteria) {
+        const rows = Array.from(tbody.querySelectorAll("tr"));
+        const sortedRows = rows.sort((a, b) => {
+            const aValue = parseInt(a.querySelector(`.${criteria}`).textContent);
+            const bValue = parseInt(b.querySelector(`.${criteria}`).textContent);
+            return bValue - aValue;
+        });
+
+        tbody.innerHTML = "";
+        sortedRows.forEach(row => tbody.appendChild(row));
+    }
+
+    // Event listeners to sort table when header is clicked
+    const basicSortBtn = document.querySelector(".basicSort");
+    if (basicSortBtn) {
+        basicSortBtn.addEventListener("click", function() {
+            sortTable("basicVoteCount");
+        });
+    }
+
+    const depthSortBtn = document.querySelector(".depthSort");
+    if (depthSortBtn) {
+        depthSortBtn.addEventListener("click", function() {
+            sortTable("depthVoteCount");
+        });
+    }
+
+    const engageSortBtn = document.querySelector(".engageSort");
+    if (engageSortBtn) {
+        engageSortBtn.addEventListener("click", function() {
+            sortTable("engageVoteCount");
+        });
+    }
+});

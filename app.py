@@ -161,10 +161,14 @@ def videos_add():
 
     if form.validate_on_submit():
         video_id = form.id.data
-        video = Video.add_video(id=video_id, nominator_username=g.user.username)
-        video.topics.extend(form.topics.data)
+        if Video.query.get(video_id):
+            flash("Video already nominated", 'danger')
+            return render_template('videos/new.html', form=form)
 
-        db.session.commit()
+        else:
+            video = Video.add_video(id=video_id, nominator_username=g.user.username)
+            video.topics.extend(form.topics.data)
+            db.session.commit()
 
         return redirect(f"/videos/{video_id}")
 
@@ -346,17 +350,4 @@ def resources_page():
     """Show resources page"""
 
     return render_template('resources.html')
-
-
-##############################################################################
-# TODO: REMOVE AFTER PRODUCTION
-@app.after_request
-def add_header(req):
-    """Add non-caching headers on every request."""
-
-    req.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    req.headers["Pragma"] = "no-cache"
-    req.headers["Expires"] = "0"
-    req.headers['Cache-Control'] = 'public, max-age=0'
-    return req
 

@@ -8,7 +8,7 @@ with app.app_context():
 topics = [
     Topic(
         name="Overview",
-        description="The idea of calculus in a broad stoke"
+        description="The idea of calculus in broad stokes"
         ),
     Topic(
         name="Limits and Continuity",

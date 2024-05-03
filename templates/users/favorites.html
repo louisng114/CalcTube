@@ -6,64 +6,68 @@
 
 <div class="m-3">
     <table class="table table-striped videoTable">
-        <tr>
-            <th>Video Name</th>
-            <th>Video Length</th>
-            <th>Basics</th>
-            <th>In-depth</th>
-            <th>Engaging</th>
-            <th>Fav.</th>
-        </tr>
-        {% for video in g.user.favorites %}
-        <tr>
-            <td><a href="/videos/{{ video.id }}">{% if video.title()|length > 30 %}
-                {{ video.title()[:30] }}...
-              {% else %}
-                {{ video.title() }}
-              {% endif %}</a></td>
-            <td>{{ video.readable_duration() }}</td>
-            <td>
-                <div class="voteContainer">
-                    <form method="POST" action="/videos/{{ video.id }}/basic" class="voteForm">
-                        <button class="btn btn-sm">
-                            <i class="voteIcon {{'fa-solid' if video in g.user.basic_votes else 'fa-regular'}} fa-thumbs-up"></i>
-                        </button>
+        <thead>
+            <tr>
+                <th>Video Name</th>
+                <th>Video Length</th>
+                <th>Basics <i class="fa-solid fa-arrow-down-9-1 basicSort"></i></th>
+                <th>In-depth <i class="fa-solid fa-arrow-down-9-1 depthSort"></i></th>
+                <th>Engaging <i class="fa-solid fa-arrow-down-9-1 engageSort"></i></th>
+                <th>Fav.</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for video in g.user.favorites %}
+            <tr>
+                <td><a href="/videos/{{ video.id }}">{% if video.title()|length > 30 %}
+                    {{ video.title()[:30] }}...
+                {% else %}
+                    {{ video.title() }}
+                {% endif %}</a></td>
+                <td>{{ video.readable_duration() }}</td>
+                <td>
+                    <div class="voteContainer">
+                        <form method="POST" action="/videos/{{ video.id }}/basic" class="voteForm">
+                            <button class="btn btn-sm">
+                                <i class="voteIcon {{'fa-solid' if video in g.user.basic_votes else 'fa-regular'}} fa-thumbs-up"></i>
+                            </button>
+                        </form>
+                        <span class="voteCount basicVoteCount">{{ video.basic_vote_users | length }}</span>
+                    </div>
+                </td>
+                <td>
+                    <div class="voteContainer">
+                        <form method="POST" action="/videos/{{ video.id }}/depth" class="voteForm">
+                            <button class="btn btn-sm">
+                                <i class="voteIcon {{'fa-solid' if video in g.user.depth_votes else 'fa-regular'}} fa-thumbs-up"></i>
+                            </button>
+                        </form>
+                        <span class="voteCount depthVoteCount">{{ video.depth_vote_users | length }}</span>
+                    </div>
+                </td>
+                <td>
+                    <div class="voteContainer">
+                        <form method="POST" action="/videos/{{ video.id }}/engage" class="voteForm">
+                            <button class="btn btn-sm">
+                                <i class="voteIcon {{'fa-solid' if video in g.user.engage_votes else 'fa-regular'}} fa-thumbs-up"></i>
+                            </button>
+                        </form>
+                        <span class="voteCount engageVoteCount">{{ video.engage_vote_users | length }}</span>
+                    </div>
                     </form>
-                    <span class="voteCount">{{ video.basic_vote_users | length }}</span>
-                </div>
-            </td>
-            <td>
-                <div class="voteContainer">
-                    <form method="POST" action="/videos/{{ video.id }}/depth" class="voteForm">
-                        <button class="btn btn-sm">
-                            <i class="voteIcon {{'fa-solid' if video in g.user.depth_votes else 'fa-regular'}} fa-thumbs-up"></i>
-                        </button>
-                    </form>
-                    <span class="voteCount">{{ video.depth_vote_users | length }}</span>
-                </div>
-            </td>
-            <td>
-                <div class="voteContainer">
-                    <form method="POST" action="/videos/{{ video.id }}/engage" class="voteForm">
-                        <button class="btn btn-sm">
-                            <i class="voteIcon {{'fa-solid' if video in g.user.engage_votes else 'fa-regular'}} fa-thumbs-up"></i>
-                        </button>
-                    </form>
-                    <span class="voteCount">{{ video.engage_vote_users | length }}</span>
-                </div>
-                </form>
-            </td>
-            <td>
-                <div class="favContainer">
-                    <form method="POST" action="/videos/{{ video.id }}/favorite" class="favForm">
-                        <button class="btn btn-sm" data-video-id="{{ video.id }}">
-                            <i class="voteIcon {{'fa-solid' if video in g.user.favorites else 'fa-regular'}} fa-star"></i>
-                        </button>
-                    </form>
-                </div>
-            </td>
-        </tr>
-        {% endfor %}
+                </td>
+                <td>
+                    <div class="favContainer">
+                        <form method="POST" action="/videos/{{ video.id }}/favorite" class="favForm">
+                            <button class="btn btn-sm" data-video-id="{{ video.id }}">
+                                <i class="voteIcon {{'fa-solid' if video in g.user.favorites else 'fa-regular'}} fa-star"></i>
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
 </div>
 

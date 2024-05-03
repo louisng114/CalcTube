@@ -1,6 +1,6 @@
 body {
     position: relative;
-    min-height: 97.5vh;
+    min-height: 98.3vh;
 }
 
 .content-wrap {
@@ -58,7 +58,7 @@ footer {
     margin-left: 5px;
 }
 
-.voteBlock .voteForm , voteBlock .favForm{
+.voteBlock .voteForm , .voteBlock .favForm{
     display: inline;
 }
 

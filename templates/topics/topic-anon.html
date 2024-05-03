@@ -17,26 +17,30 @@
 <div class="m-3">
     <h2>Videos</h2>
     <table class="table table-striped videoTable">
-        <tr>
-            <th>Video Title</th>
-            <th>Video Length</th>
-            <th>Basics</th>
-            <th>In-depth</th>
-            <th>Engaging</th>
-        </tr>
-        {% for video in topic.videos %}
-        <tr>
-            <td><a href="/videos/{{ video.id }}">{% if video.title()|length > 30 %}
-                {{ video.title()[:30] }}...
-              {% else %}
-                {{ video.title() }}
-              {% endif %}</a></td></td>
-            <td>{{ video.readable_duration() }}</td>
-            <td>{{ video.basic_vote_users | length }}</td>
-            <td>{{ video.depth_vote_users | length }}</td>
-            <td>{{ video.engage_vote_users | length }}</td>
-        </tr>
-        {% endfor %}
+        <thead>
+            <tr>
+                <th>Video Title</th>
+                <th>Video Length</th>
+                <th>Basics <i class="fa-solid fa-arrow-down-9-1 basicSort"></i></th>
+                <th>In-depth <i class="fa-solid fa-arrow-down-9-1 depthSort"></i></th>
+                <th>Engaging <i class="fa-solid fa-arrow-down-9-1 engageSort"></i></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for video in topic.videos %}
+            <tr>
+                <td><a href="/videos/{{ video.id }}">{% if video.title()|length > 30 %}
+                    {{ video.title()[:30] }}...
+                  {% else %}
+                    {{ video.title() }}
+                  {% endif %}</a></td>
+                <td>{{ video.readable_duration() }}</td>
+                <td class="basicVoteCount">{{ video.basic_vote_users | length }}</td>
+                <td class="depthVoteCount">{{ video.depth_vote_users | length }}</td>
+                <td class="engageVoteCount">{{ video.engage_vote_users | length }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
 </div>
 
