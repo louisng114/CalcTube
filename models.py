@@ -6,7 +6,7 @@ import isodate
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 
-from secret import api_key
+from /etc/secrets/secret import api_key
 
 bcrypt = Bcrypt()
 db = SQLAlchemy()
