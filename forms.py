@@ -8,7 +8,7 @@ class UserForm(FlaskForm):
     username = StringField("Username: ", render_kw={"placeholder": "Enter Username"}, validators=[InputRequired(message="Username required"), Length(max=15, message="Username cannot exceed 15 characters")])
     password = PasswordField("Password: ", render_kw={"placeholder": "Enter Password"}, validators=[InputRequired(message="Password required")])
 
-## extend QuerySelectMultipleField class to turn option selection into checkboxes ##
+## Extend QuerySelectMultipleField class to turn option selection into checkboxes ##
 class QuerySelectMultipleFieldWithCheckboxes(QuerySelectMultipleField):
     widget = widgets.ListWidget()
     option_widget = widgets.CheckboxInput()

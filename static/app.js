@@ -125,6 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// Sorting functionality
 document.addEventListener("DOMContentLoaded", function() {
     const table = document.querySelector(".videoTable");
     let tbody;

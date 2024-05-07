@@ -24,54 +24,63 @@ class User(db.Model):
 
     __tablename__ = "users"
 
+    # username of the user
     username = db.Column(
         db.String(15),
         primary_key=True
     )
 
+    # hashed password of the user
     hashed_password = db.Column(
         db.String,
         nullable=False
     )
 
+    # Whether or not the user is an admin; currently unused
     role = db.Column(db.String)
 
+    # Timestamp of account creation
     created_at = db.Column(
         db.DateTime,
         nullable=False,
         default=datetime.now
     )
 
+    # See the secondary table
     favorites = db.relationship(
         "Video",
         secondary="favorites"
     )
 
+    # See the secondary table
     basic_votes = db.relationship(
         "Video",
         secondary="basic_votes",
         backref=db.backref("basic_vote_users")
     )
 
+    # See the secondary table
     depth_votes = db.relationship(
         "Video",
         secondary="depth_votes",
         backref=db.backref("depth_vote_users")
     )
 
+    # See the secondary table
     engage_votes = db.relationship(
         "Video",
         secondary="engage_votes",
         backref=db.backref("engage_vote_users")
     )
     
+    # Videos the users nominated
     nominations = db.relationship('Video', back_populates='nominator')
 
     @classmethod
     def register(cls, username, password):
-        """Register user.
+        """Register user
 
-        Hashes password and adds user to system.
+        Hashes password and adds user to system
         """
 
         hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
@@ -109,7 +118,7 @@ class Video(db.Model):
 
     __tablename__ = "videos"
 
-    # video id on YouTube
+    # Video id on YouTube
     id = db.Column(
         db.String(15),
         primary_key=True
@@ -125,14 +134,17 @@ class Video(db.Model):
         nullable=False
     )
 
+    # Length of the video
     duration = db.Column(
         db.Integer(),
         nullable=False
     )
 
+    # The user who nominated the video
     nominator = db.relationship('User', back_populates='nominations')
 
     def readable_duration(self):
+        """Transform duration into a readable format"""
         hours = self.duration // 3600
         minutes = (self.duration % 3600) // 60
         seconds = self.duration % 60
@@ -143,6 +155,7 @@ class Video(db.Model):
             return f"{minutes:02d}:{seconds:02d}"
 
     def title(self):
+        """Obtain video title from the YouTube API"""
         request = youtube.videos().list(part='snippet', id=self.id)
         response = request.execute()
         title = response['items'][0]['snippet']['title']
@@ -150,9 +163,9 @@ class Video(db.Model):
 
     @classmethod
     def add_video(cls, id, nominator_username):
-        """Add video.
+        """Add video
 
-        Query YouTube Data API for video duration.
+        Query YouTube Data API for video duration
         """
 
         request = youtube.videos().list(part='contentDetails', id=id)
