@@ -7,7 +7,7 @@ from forms import UserForm, VideoForm, VideoEditForm
 from secret import secret_key
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///calctube_db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://tbqcojnx:KDOjqyvW9ESxg_kQY-NJTDUEy7rRP0Cd@bubble.db.elephantsql.com/tbqcojnx'
 
 connect_db(app)
 with app.app_context():
