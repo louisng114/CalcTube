@@ -4,13 +4,7 @@ from sqlalchemy.exc import IntegrityError
 from models import db, connect_db, User, Video, Topic
 from forms import UserForm, VideoForm, VideoEditForm
 
-from secret import secret_key
-
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///calctube_db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_ECHO'] = False
-app.config['SECRET_KEY'] = secret_key
 
 connect_db(app)
 with app.app_context():
