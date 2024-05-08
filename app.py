@@ -4,8 +4,11 @@ from sqlalchemy.exc import IntegrityError
 from models import db, connect_db, User, Video, Topic
 from forms import UserForm, VideoForm, VideoEditForm
 
+from secret import secret_key
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://tbqcojnx:KDOjqyvW9ESxg_kQY-NJTDUEy7rRP0Cd@bubble.db.elephantsql.com/tbqcojnx'
+app.config['SECRET_KEY'] = secret_key
 
 connect_db(app)
 with app.app_context():
